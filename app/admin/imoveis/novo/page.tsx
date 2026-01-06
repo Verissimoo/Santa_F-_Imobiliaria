@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/hooks/use-toast" // Certifique-se de que este hook existe
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useToast } from "@/hooks/use-toast"
 
 export default function NovoImovelPage() {
   const router = useRouter()
@@ -19,10 +19,10 @@ export default function NovoImovelPage() {
   const [images, setImages] = useState<string[]>([])
   const [dragActive, setDragActive] = useState(false)
 
-  // Estado para os campos do formulário
+  // Estado atualizado: removeu finalidade, adicionou category
   const [formData, setFormData] = useState({
     title: "",
-    finalidade: "",
+    category: "", 
     tipo: "",
     description: "",
     cidade: "",
@@ -35,13 +35,25 @@ export default function NovoImovelPage() {
     parking: "",
   })
 
+  // Mapeamento de Tipos por Categoria
+  const propertyTypes = {
+    Urbano: ["Casa", "Apartamento", "Lote", "Terreno", "Comercial"],
+    Rural: ["Fazenda", "Chácara", "Sítio", "Terreno Rural"]
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target
     setFormData((prev) => ({ ...prev, [id]: value }))
   }
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev) => {
+      // Se mudar a categoria, limpa o tipo para evitar inconsistência
+      if (name === "category") {
+        return { ...prev, [name]: value, tipo: "" }
+      }
+      return { ...prev, [name]: value }
+    })
   }
 
   const handleDrag = (e: React.DragEvent) => {
@@ -90,9 +102,8 @@ export default function NovoImovelPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          // Concatenamos a localização para salvar no banco conforme o Schema definido
           location: `${formData.endereco}, ${formData.bairro} - ${formData.cidade}`,
-          images: images, // Enviando as strings Base64 por enquanto
+          images: images,
         }),
       })
 
@@ -103,8 +114,9 @@ export default function NovoImovelPage() {
         description: "Imóvel cadastrado com sucesso.",
       })
       
-      router.push("/imoveis") // Redireciona para a listagem
+      router.push("/imoveis")
     } catch (error) {
+      console.error(error)
       toast({
         variant: "destructive",
         title: "Erro",
@@ -150,29 +162,31 @@ export default function NovoImovelPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Título do Anúncio</Label>
-                  <Input id="title" value={formData.title} onChange={handleChange} placeholder="Ex: Apartamento de 3 quartos no Jardim Paulista" required />
+                  <Input id="title" value={formData.title} onChange={handleChange} placeholder="Ex: Fazenda Santa Maria" required />
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
+                  {/* CATEGORIA (Zona) */}
                   <div className="space-y-2">
-                    <Label htmlFor="finalidade">Finalidade</Label>
-                    <Select onValueChange={(v) => handleSelectChange("finalidade", v)} required>
-                      <SelectTrigger id="finalidade"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <Label htmlFor="category">Categoria (Zona)</Label>
+                    <Select onValueChange={(v) => handleSelectChange("category", v)} required>
+                      <SelectTrigger id="category"><SelectValue placeholder="Selecione" /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Venda">Venda</SelectItem>
-                        <SelectItem value="Locação">Locação</SelectItem>
+                        <SelectItem value="Urbano">Urbano</SelectItem>
+                        <SelectItem value="Rural">Rural</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
+                  {/* TIPO (Dinâmico) */}
                   <div className="space-y-2">
                     <Label htmlFor="tipo">Tipo de Imóvel</Label>
-                    <Select onValueChange={(v) => handleSelectChange("tipo", v)} required>
+                    <Select onValueChange={(v) => handleSelectChange("tipo", v)} required disabled={!formData.category}>
                       <SelectTrigger id="tipo"><SelectValue placeholder="Selecione" /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Apartamento">Apartamento</SelectItem>
-                        <SelectItem value="Casa">Casa</SelectItem>
-                        <SelectItem value="Terreno">Terreno</SelectItem>
+                         {formData.category && propertyTypes[formData.category as keyof typeof propertyTypes].map(type => (
+                           <SelectItem key={type} value={type}>{type}</SelectItem>
+                         ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -199,7 +213,7 @@ export default function NovoImovelPage() {
                     <Input id="cidade" value={formData.cidade} onChange={handleChange} required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="bairro">Bairro</Label>
+                    <Label htmlFor="bairro">Bairro / Região</Label>
                     <Input id="bairro" value={formData.bairro} onChange={handleChange} required />
                   </div>
                 </div>
@@ -226,7 +240,7 @@ export default function NovoImovelPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="area">Área (m²)</Label>
+                  <Label htmlFor="area">Área (m² ou ha)</Label>
                   <Input id="area" type="number" value={formData.area} onChange={handleChange} required />
                 </div>
 

@@ -12,8 +12,8 @@ model Property {
   description String   @db.Text
   price       String
   location    String
-  finalidade  String   // 'Venda' ou 'Locação'
-  tipo        String   // 'Casa', 'Apartamento', etc.
+  category    String   // NOVO: 'Urbano' ou 'Rural'
+  tipo        String   // 'Casa', 'Fazenda', 'Lote', etc.
   bedrooms    Int
   bathrooms   Int
   parking     Int

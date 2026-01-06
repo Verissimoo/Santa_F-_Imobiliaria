@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -28,13 +27,21 @@ export function Navbar() {
             <Link href="/empresa" className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors">
               A Empresa
             </Link>
-            <Link
-              href="/admin/imoveis/novo"
+            
+            {/* Link de Contato via WhatsApp */}
+            <Link 
+              href="https://wa.me/5561974036070" 
+              target="_blank" 
+              rel="noopener noreferrer"
               className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors"
             >
-              Admin
+              Contato
             </Link>
-            <Button className="bg-[#1E5933] hover:bg-[#1E5933]/90 text-white">Contato</Button>
+            
+            {/* Link para o Painel Administrativo */}
+            <Link href="/admin" className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors">
+              Painel Admin
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -47,35 +54,43 @@ export function Navbar() {
         {isOpen && (
           <div className="md:hidden py-4 border-t">
             <div className="flex flex-col gap-4">
-              <Link
-                href="/"
-                className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors px-2 py-2"
+              <Link 
+                href="/" 
+                className="px-2 py-2 text-[#1E5933] font-medium" 
                 onClick={() => setIsOpen(false)}
               >
                 Início
               </Link>
-              <Link
-                href="/imoveis"
-                className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors px-2 py-2"
+              <Link 
+                href="/imoveis" 
+                className="px-2 py-2 text-[#1E5933] font-medium" 
                 onClick={() => setIsOpen(false)}
               >
                 Imóveis
               </Link>
-              <Link
-                href="/empresa"
-                className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors px-2 py-2"
+              <Link 
+                href="/empresa" 
+                className="px-2 py-2 text-[#1E5933] font-medium" 
                 onClick={() => setIsOpen(false)}
               >
                 A Empresa
               </Link>
-              <Link
-                href="/admin/imoveis/novo"
-                className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors px-2 py-2"
+              <Link 
+                href="https://wa.me/5561974036070" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2 py-2 text-[#1E5933] font-medium" 
                 onClick={() => setIsOpen(false)}
               >
-                Admin
+                Contato
               </Link>
-              <Button className="bg-[#1E5933] hover:bg-[#1E5933]/90 text-white w-full">Contato</Button>
+              <Link 
+                href="/admin" 
+                className="px-2 py-2 text-[#1E5933] font-medium border-t pt-4" 
+                onClick={() => setIsOpen(false)}
+              >
+                Painel Admin
+              </Link>
             </div>
           </div>
         )}

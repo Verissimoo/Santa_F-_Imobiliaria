@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
-// Método POST para salvar um novo imóvel
 export async function POST(request: Request) {
   try {
     const body = await request.json()
     
-    // O Prisma criará o registro na tabela 'Property'
     const newProperty = await prisma.property.create({
       data: {
         title: body.title,
         description: body.description,
         price: body.price,
         location: body.location,
-        finalidade: body.finalidade,
+        category: body.category, // Alinhado com o novo Schema
         tipo: body.tipo,
         bedrooms: Number(body.bedrooms),
         bathrooms: Number(body.bathrooms),
@@ -28,5 +26,16 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Erro na API:", error)
     return NextResponse.json({ error: "Erro ao salvar o imóvel" }, { status: 500 })
+  }
+}
+
+export async function GET() {
+  try {
+    const properties = await prisma.property.findMany({
+      orderBy: { createdAt: 'desc' }
+    })
+    return NextResponse.json(properties)
+  } catch (error) {
+    return NextResponse.json({ error: "Erro ao buscar imóveis" }, { status: 500 })
   }
 }
