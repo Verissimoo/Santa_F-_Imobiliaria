@@ -1,35 +1,28 @@
 import { Bed, Bath, Car, Maximize, MapPin, Phone, Mail, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { prisma } from "@/lib/prisma" // Importação do Prisma
+import { notFound } from "next/navigation"
 
-const propertyDetails = {
-  id: "1",
-  title: "Apartamento Moderno em Jardins",
-  price: "R$ 850.000",
-  location: "Jardins, São Paulo - SP",
-  description:
-    "Magnífico apartamento localizado em uma das regiões mais nobres de São Paulo. Este imóvel oferece acabamento de alto padrão, ambientes amplos e muito bem distribuídos. Possui uma vista privilegiada e está próximo a restaurantes, shoppings e áreas de lazer. O condomínio oferece completa infraestrutura com academia, piscina, salão de festas e segurança 24 horas.",
-  bedrooms: 3,
-  bathrooms: 2,
-  parking: 2,
-  area: 120,
-  images: [
-    "/luxury-apartment-living-room.png",
-    "/modern-kitchen-island.png",
-    "/elegant-master-bedroom.jpg",
-    "/luxurious-bathroom-marble.jpg",
-  ],
-  features: [
-    "Ar condicionado",
-    "Armários embutidos",
-    "Varanda gourmet",
-    "Piso em porcelanato",
-    "Iluminação LED",
-    "Sistema de segurança",
-  ],
-}
+export default async function PropertyDetailPage(props: { params: Promise<{ id: string }> }) {
+  // CORREÇÃO: No Next.js 15/16, params deve ser aguardado
+  const { id } = await props.params;
 
-export default function PropertyDetailPage() {
+  // Busca os dados reais do imóvel no banco de dados
+  const property = await prisma.property.findUnique({
+    where: { id: id }
+  });
+
+  if (!property) {
+    return notFound();
+  }
+
+  // Função para garantir que o "R$" apareça e o preço seja formatado
+  const formattedPrice = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(Number(property.price.replace(/\D/g, "")) / 100 || Number(property.price));
+
   return (
     <div className="min-h-screen bg-white">
       {/* Barra de Navegação Interna */}
@@ -47,12 +40,12 @@ export default function PropertyDetailPage() {
         <div className="max-w-7xl mx-auto">
           <div className="relative h-[300px] md:h-[550px] w-full overflow-hidden rounded-2xl shadow-lg">
             <img
-              src={propertyDetails.images[0] || "/placeholder.svg"}
-              alt={propertyDetails.title}
+              src={property.images[0] || "/placeholder.svg"}
+              alt={property.title}
               className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
             />
             <div className="absolute top-4 left-4 bg-[#1E5933] text-white px-4 py-1 rounded-full text-sm font-medium">
-              Venda
+              {property.tipo}
             </div>
           </div>
         </div>
@@ -67,13 +60,13 @@ export default function PropertyDetailPage() {
             <div className="lg:col-span-2">
               <div className="mb-8">
                 <h1 className="text-3xl md:text-5xl font-serif text-[#1E5933] mb-4 leading-tight">
-                  {propertyDetails.title}
+                  {property.title}
                 </h1>
                 <div className="flex items-center text-gray-500 gap-2 mb-4">
                   <MapPin className="w-5 h-5 text-[#B5893E]" />
-                  <span className="text-lg">{propertyDetails.location}</span>
+                  <span className="text-lg">{property.location}</span>
                 </div>
-                <div className="text-4xl font-bold text-[#1E5933]">{propertyDetails.price}</div>
+                <div className="text-4xl font-bold text-[#1E5933]">{formattedPrice}</div>
               </div>
 
               {/* Icon Features Grid */}
@@ -81,53 +74,42 @@ export default function PropertyDetailPage() {
                 <div className="flex flex-col items-center text-center gap-2">
                   <Bed className="w-6 h-6 text-[#B5893E]" />
                   <span className="text-sm text-gray-500">Quartos</span>
-                  <span className="font-bold text-[#1E5933]">{propertyDetails.bedrooms}</span>
+                  <span className="font-bold text-[#1E5933]">{property.bedrooms}</span>
                 </div>
                 <div className="flex flex-col items-center text-center gap-2">
                   <Bath className="w-6 h-6 text-[#B5893E]" />
                   <span className="text-sm text-gray-500">Banheiros</span>
-                  <span className="font-bold text-[#1E5933]">{propertyDetails.bathrooms}</span>
+                  <span className="font-bold text-[#1E5933]">{property.bathrooms}</span>
                 </div>
                 <div className="flex flex-col items-center text-center gap-2">
                   <Car className="w-6 h-6 text-[#B5893E]" />
                   <span className="text-sm text-gray-500">Vagas</span>
-                  <span className="font-bold text-[#1E5933]">{propertyDetails.parking}</span>
+                  <span className="font-bold text-[#1E5933]">{property.parking}</span>
                 </div>
                 <div className="flex flex-col items-center text-center gap-2">
                   <Maximize className="w-6 h-6 text-[#B5893E]" />
                   <span className="text-sm text-gray-500">Área</span>
-                  <span className="font-bold text-[#1E5933]">{propertyDetails.area} m²</span>
+                  <span className="font-bold text-[#1E5933]">{property.area} m²</span>
                 </div>
               </div>
 
               {/* Description Section */}
               <div className="mb-10">
                 <h2 className="text-2xl font-serif text-[#1E5933] mb-4 border-b pb-2">Descrição do Imóvel</h2>
-                <p className="text-gray-600 leading-relaxed text-lg">{propertyDetails.description}</p>
+                <p className="text-gray-600 leading-relaxed text-lg">{property.description}</p>
               </div>
 
-              {/* Features List */}
-              <div className="mb-10">
-                <h2 className="text-2xl font-serif text-[#1E5933] mb-4 border-b pb-2">O que este imóvel oferece</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {propertyDetails.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-[#B5893E]" />
-                      <span className="text-gray-600">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {/* A SEÇÃO "O QUE ESTE IMÓVEL OFERECE" FOI REMOVIDA DAQUI CONFORME SOLICITADO */}
 
               {/* Gallery Grid */}
               <div>
                 <h2 className="text-2xl font-serif text-[#1E5933] mb-6 border-b pb-2">Galeria de Fotos</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {propertyDetails.images.slice(1).map((image, index) => (
+                  {property.images.slice(1).map((image, index) => (
                     <div key={index} className="h-64 overflow-hidden rounded-xl shadow-sm">
                       <img
                         src={image || "/placeholder.svg"}
-                        alt={`${propertyDetails.title} - ${index + 2}`}
+                        alt={`${property.title} - Foto ${index + 2}`}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       />
                     </div>
@@ -175,9 +157,9 @@ export default function PropertyDetailPage() {
         </div>
       </section>
 
-      {/* Floating WhatsApp Button */}
+      {/* Floating WhatsApp Button - Agora com mensagem dinâmica */}
       <Link
-        href="https://wa.me/556298361616?text=Olá! Vi o imóvel Apartamento Moderno em Jardins no site e gostaria de mais informações."
+        href={`https://wa.me/5561974036070?text=Olá! Vi o imóvel ${property.title} no site e gostaria de mais informações.`}
         target="_blank"
         className="fixed bottom-8 right-8 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110 z-50 animate-bounce"
       >

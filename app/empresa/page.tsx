@@ -1,167 +1,119 @@
-import { MapPin, Phone, Mail, Clock } from "lucide-react"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
+import { CheckCircle, Target, Eye, Shield, MapPin, Globe } from "lucide-react"
 
 export default function EmpresaPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
+      
+      
       {/* Hero Section */}
-      <section className="relative h-[400px] bg-[#1E5933]">
-        <div className="absolute inset-0">
-          <img
-            src="/real-estate-team-office.png"
-            alt="Santa Fé Equipe"
-            className="w-full h-full object-cover opacity-20"
-          />
-        </div>
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
-          <h1 className="text-4xl md:text-5xl font-serif text-white text-center mb-4">A Empresa</h1>
-          <p className="text-lg text-white/90 text-center max-w-2xl">
-            Excelência e confiança no mercado imobiliário há mais de 25 anos
+      <section className="relative py-20 bg-[#1E5933] text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6">Santa Fé Imobiliária</h1>
+          <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            Tradição, confiança e excelência realizando sonhos em Pirenópolis e região.
           </p>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif text-[#1E5933] mb-6">Sobre Nós</h2>
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>
-                A <strong className="text-[#1E5933]">Santa Fé Imobiliária</strong> foi fundada em 1998 com o compromisso
-                de oferecer serviços de excelência em consultoria e gestão imobiliária. Ao longo de mais de duas
-                décadas, construímos uma sólida reputação baseada em profissionalismo, ética e dedicação aos nossos
-                clientes.
+      {/* História */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-serif font-bold text-[#1E5933] mb-6 border-b-2 border-[#B5893E] inline-block">História</h2>
+            <p className="text-muted-foreground leading-relaxed text-lg">
+              Somos resultado de uma parceria construída ao longo de anos de convivência profissional e comercial, pautada pela confiança, transparência e crescimento mútuo. Nosso propósito é ser referência no mercado imobiliário, realizando sonhos e grandes negócios com segurança e excelência. Conectamos pessoas a lares, oportunidades e investimentos, criando valor duradouro para todos.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Missão e Visão */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-[#1E5933]">
+              <div className="flex items-center gap-3 mb-4">
+                <Target className="w-8 h-8 text-[#B5893E]" />
+                <h3 className="text-2xl font-serif font-bold text-[#1E5933]">Missão</h3>
+              </div>
+              <p className="text-muted-foreground">
+                Auxiliar e facilitar a realização de sonhos imobiliários com ética, segurança e excelência, oferecendo soluções completas em compra, venda, locação e intermediação. Atuar com foco na satisfação do cliente, qualificação contínua da equipe e credibilidade, proporcionando experiências tranquilas, claras e eficientes.
               </p>
-              <p>
-                Nossa equipe de consultores especializados está preparada para atender todas as suas necessidades no
-                mercado imobiliário, seja na compra, venda ou locação de imóveis residenciais e comerciais. Trabalhamos
-                com um portfólio exclusivo de propriedades nas melhores localizações de São Paulo.
-              </p>
-              <p>
-                Acreditamos que cada cliente é único e merece um atendimento personalizado. Por isso, dedicamos tempo
-                para entender suas necessidades e encontrar a solução perfeita. Nossa missão é transformar sonhos em
-                realidade, conectando pessoas aos imóveis ideais.
+            </div>
+            <div className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-[#1E5933]">
+              <div className="flex items-center gap-3 mb-4">
+                <Eye className="w-8 h-8 text-[#B5893E]" />
+                <h3 className="text-2xl font-serif font-bold text-[#1E5933]">Visão</h3>
+              </div>
+              <p className="text-muted-foreground">
+                Ser referência e liderança no mercado imobiliário, reconhecida pela qualidade no atendimento, inovação, eficiência e resultados concretos. Tornar-se a melhor e mais completa prestadora de serviços do segmento, criando oportunidades que transformam paisagens urbanas e fortalecem investimentos com solidez e valor duradouro.
               </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif text-[#1E5933] mb-6">Nossa Missão</h2>
-            <div className="bg-[#F8F9FA] p-8 rounded-xl border">
+      {/* Atuação e Segmentos */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-2xl font-serif font-bold text-[#1E5933] mb-6 flex items-center gap-2">
+                <Globe className="w-6 h-6 text-[#B5893E]" /> Nossa Atuação
+              </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Proporcionar experiências excepcionais no mercado imobiliário, conectando pessoas aos imóveis dos seus
-                sonhos com profissionalismo, transparência e dedicação. Buscamos constantemente a excelência em nossos
-                serviços, mantendo valores sólidos de ética, confiança e compromisso com a satisfação dos nossos
-                clientes.
+                Temos como foco principal a cidade de <strong>Pirenópolis (GO)</strong>, expandindo nossa presença para todo o estado de Goiás, incluindo Goiânia e região metropolitana, além de outras regiões do país (MT, MS, TO, BA, MG).
+              </p>
+            </div>
+            <div>
+              <h3 className="text-2xl font-serif font-bold text-[#1E5933] mb-6 flex items-center gap-2">
+                <Shield className="w-6 h-6 text-[#B5893E]" /> Nosso Compromisso
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Atuamos com responsabilidade, seriedade e foco em resultados, garantindo negócios seguros, atendimento humanizado e relações duradouras baseadas na confiança e profissionalismo.
               </p>
             </div>
           </div>
-
-          <div>
-            <h2 className="text-3xl md:text-4xl font-serif text-[#1E5933] mb-6">Nossos Valores</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-6 bg-[#F8F9FA] rounded-xl">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#B5893E]/20 flex items-center justify-center">
-                  <div className="w-6 h-6 bg-[#B5893E] rounded-full" />
-                </div>
-                <h3 className="text-lg font-semibold text-[#1E5933] mb-2">Integridade</h3>
-                <p className="text-sm text-muted-foreground">Transparência e ética em todas as nossas relações</p>
+          
+          <div className="mt-16 bg-[#1E5933] text-white p-10 rounded-3xl">
+            <h3 className="text-2xl font-serif font-bold mb-8 text-center text-[#B5893E]">Segmentos de Operação</h3>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-white/10 p-6 rounded-xl backdrop-blur-sm">
+                <h4 className="font-bold text-xl mb-3">Mercado Urbano</h4>
+                <p className="text-white/80 text-sm">Compra, venda e locação de imóveis residenciais, comerciais, loteamentos, condomínios e áreas para desenvolvimento urbano.</p>
               </div>
-
-              <div className="text-center p-6 bg-[#F8F9FA] rounded-xl">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#B5893E]/20 flex items-center justify-center">
-                  <div className="w-6 h-6 bg-[#B5893E] rounded-full" />
-                </div>
-                <h3 className="text-lg font-semibold text-[#1E5933] mb-2">Excelência</h3>
-                <p className="text-sm text-muted-foreground">Comprometimento com a qualidade em cada detalhe</p>
-              </div>
-
-              <div className="text-center p-6 bg-[#F8F9FA] rounded-xl">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#B5893E]/20 flex items-center justify-center">
-                  <div className="w-6 h-6 bg-[#B5893E] rounded-full" />
-                </div>
-                <h3 className="text-lg font-semibold text-[#1E5933] mb-2">Dedicação</h3>
-                <p className="text-sm text-muted-foreground">Foco total na satisfação dos nossos clientes</p>
+              <div className="bg-white/10 p-6 rounded-xl backdrop-blur-sm">
+                <h4 className="font-bold text-xl mb-3">Mercado Rural</h4>
+                <p className="text-white/80 text-sm">Intermediação de fazendas e áreas rurais, pecuária, lavoura, áreas de reserva e propriedades para expansão territorial.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-16 px-4 bg-[#F8F9FA]">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-serif text-[#1E5933] mb-8 text-center">Entre em Contato</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-xl border">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#B5893E]/10 flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-[#B5893E]" />
+      {/* Valores */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-serif font-bold text-[#1E5933] mb-12">Nossos Valores</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {[
+              "Ética e Honestidade", "Transparência", "Foco no Cliente", 
+              "Profissionalismo", "Credibilidade", "Inovação"
+            ].map((valor, i) => (
+              <div key={i} className="flex flex-col items-center gap-3">
+                <div className="p-4 bg-white rounded-full shadow-sm text-[#B5893E]">
+                  <CheckCircle className="w-6 h-6" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-[#1E5933] mb-2">Endereço</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Av. Paulista, 1000 - Sala 1501
-                    <br />
-                    Bela Vista, São Paulo - SP
-                    <br />
-                    CEP: 01310-100
-                  </p>
-                </div>
+                <span className="font-medium text-[#1E5933] text-sm">{valor}</span>
               </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl border">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#B5893E]/10 flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-6 h-6 text-[#B5893E]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-[#1E5933] mb-2">Telefone</h3>
-                  <p className="text-sm text-muted-foreground">
-                    (11) 3456-7890
-                    <br />
-                    (11) 98765-4321
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl border">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#B5893E]/10 flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-6 h-6 text-[#B5893E]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-[#1E5933] mb-2">E-mail</h3>
-                  <p className="text-sm text-muted-foreground">
-                    contato@santafe.com.br
-                    <br />
-                    vendas@santafe.com.br
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl border">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#B5893E]/10 flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-6 h-6 text-[#B5893E]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-[#1E5933] mb-2">Horário</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Seg à Sex: 9h às 18h
-                    <br />
-                    Sábado: 9h às 13h
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   )
 }

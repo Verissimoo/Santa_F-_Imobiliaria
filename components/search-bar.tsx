@@ -2,25 +2,43 @@
 
 import { useState } from "react"
 import { Search } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation" // Importado para navegação
 import { Button } from "@/components/ui/button"
 
 export function SearchBar() {
-  const [category, setCategory] = useState("")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Inicializamos os estados com o que já estiver na URL ou vazio
+  const [category, setCategory] = useState(searchParams.get("category") || "")
+  const [type, setType] = useState(searchParams.get("type") || "")
+  const [city, setCity] = useState(searchParams.get("city") || "")
 
   const propertyTypes = {
     Urbano: ["Casa", "Apartamento", "Lote", "Terreno", "Comercial"],
     Rural: ["Fazenda", "Chácara", "Sítio", "Terreno Rural"]
   }
 
+  const handleSearch = () => {
+    const params = new URLSearchParams()
+    if (category) params.set("category", category)
+    if (type) params.set("type", type)
+    if (city) params.set("city", city)
+
+    // Faz a busca recarregando a página com os filtros na URL
+    router.push(`/imoveis?${params.toString()}`)
+  }
+
   return (
     <div className="w-full max-w-5xl bg-white rounded-xl shadow-2xl p-4 md:p-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Zona / Categoria */}
         <div className="flex flex-col">
           <label className="text-sm font-medium text-[#1E5933] mb-2">Zona</label>
           <select 
-            onChange={(e) => setCategory(e.target.value)}
-            className="h-11 px-4 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-[#B5893E]"
+            value={category}
+            onChange={(e) => { setCategory(e.target.value); setType(""); }}
+            className="h-11 px-4 rounded-lg border border-input bg-background text-black focus:outline-none focus:ring-2 focus:ring-[#B5893E]"
           >
             <option value="">Todas</option>
             <option value="Urbano">Urbana</option>
@@ -31,41 +49,43 @@ export function SearchBar() {
         {/* Tipo Dinâmico */}
         <div className="flex flex-col">
           <label className="text-sm font-medium text-[#1E5933] mb-2">Tipo</label>
-          <select className="h-11 px-4 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-[#B5893E]">
+          <select 
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="h-11 px-4 rounded-lg border border-input bg-background text-black focus:outline-none focus:ring-2 focus:ring-[#B5893E]"
+          >
             <option value="">Todos os tipos</option>
-            {category && propertyTypes[category as keyof typeof propertyTypes].map(type => (
-              <option key={type} value={type}>{type}</option>
+            {category && propertyTypes[category as keyof typeof propertyTypes].map(t => (
+              <option key={t} value={t}>{t}</option>
             ))}
-            {!category && [...propertyTypes.Urbano, ...propertyTypes.Rural].map(type => (
-              <option key={type} value={type}>{type}</option>
+            {!category && [...propertyTypes.Urbano, ...propertyTypes.Rural].map(t => (
+              <option key={t} value={t}>{t}</option>
             ))}
           </select>
         </div>
 
-        {/* Cidade (Foco na Região) */}
+        {/* Cidade */}
         <div className="flex flex-col">
           <label className="text-sm font-medium text-[#1E5933] mb-2">Cidade</label>
-          <select className="h-11 px-4 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-[#B5893E]">
+          <select 
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="h-11 px-4 rounded-lg border border-input bg-background text-black focus:outline-none focus:ring-2 focus:ring-[#B5893E]"
+          >
+            <option value="">Todas as cidades</option>
             <option value="Pirenópolis">Pirenópolis</option>
             <option value="Corumbá de Goiás">Corumbá de Goiás</option>
             <option value="Cocalzinho">Cocalzinho</option>
             <option value="Abadiânia">Abadiânia</option>
           </select>
         </div>
-
-        {/* Preço Máximo */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-[#1E5933] mb-2">Preço Máximo</label>
-          <select className="h-11 px-4 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-[#B5893E]">
-            <option value="">Sem limite</option>
-            <option value="500000">Até R$ 500.000</option>
-            <option value="1000000">Até R$ 1.000.000</option>
-            <option value="5000000">Até R$ 5.000.000</option>
-          </select>
-        </div>
       </div>
 
-      <Button className="w-full md:w-auto mt-4 bg-[#1E5933] hover:bg-[#1E5933]/90 text-white px-8" size="lg">
+      <Button 
+        onClick={handleSearch} 
+        className="w-full md:w-auto mt-4 bg-[#1E5933] hover:bg-[#1E5933]/90 text-white px-8" 
+        size="lg"
+      >
         <Search className="w-4 h-4 mr-2" />
         Buscar Imóveis
       </Button>
