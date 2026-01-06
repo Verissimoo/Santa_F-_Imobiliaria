@@ -1,107 +1,92 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { Pencil, Trash2, Plus, ExternalLink } from "lucide-react"
 import Link from "next/link"
-import { Plus, Trash2, Edit, Home, ExternalLink, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner" // Usando sonner para feedback visual
 
 export default function AdminDashboard() {
   const [properties, setProperties] = useState([])
-  const [loading, setLoading] = useState(true)
-  const { toast } = useToast()
 
-  // Busca os imóveis do banco
+  // Função para carregar os imóveis
   const fetchProperties = async () => {
-    try {
-      const res = await fetch("/api/properties")
-      const data = await res.json()
-      setProperties(data)
-    } catch (error) {
-      console.error("Erro ao carregar:", error)
-    } finally {
-      setLoading(false)
-    }
+    const res = await fetch("/api/properties")
+    const data = await res.json()
+    setProperties(data)
   }
 
   useEffect(() => {
     fetchProperties()
   }, [])
 
-  // Função para deletar
+  // FUNÇÃO PARA EXCLUIR
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir este imóvel?")) return
 
     try {
       const res = await fetch(`/api/properties/${id}`, { method: "DELETE" })
       if (res.ok) {
-        toast({ title: "Sucesso", description: "Imóvel removido." })
+        toast.success("Imóvel excluído com sucesso!")
         fetchProperties() // Recarrega a lista
+      } else {
+        toast.error("Erro ao excluir imóvel")
       }
     } catch (error) {
-      toast({ variant: "destructive", title: "Erro ao excluir" })
+      toast.error("Erro na conexão")
     }
   }
 
-  if (loading) return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin" /></div>
-
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="p-8 max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-serif font-bold text-[#1E5933]">Painel Santa Fé</h1>
-          <p className="text-muted-foreground">Gerencie seus imóveis cadastrados</p>
-        </div>
-        <Link href="/admin/imoveis/novo">
-          <Button className="bg-[#1E5933] hover:bg-[#1E5933]/90">
-            <Plus className="w-4 h-4 mr-2" /> Novo Imóvel
-          </Button>
-        </Link>
+        <h1 className="text-3xl font-bold text-[#1E5933]">Painel Administrativo</h1>
+        <Button asChild className="bg-[#1E5933]">
+          <Link href="/admin/imoveis/novo"><Plus className="mr-2 h-4 w-4" /> Novo Imóvel</Link>
+        </Button>
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Imóvel</TableHead>
-              <TableHead>Categoria</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Preço</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {properties.map((property: any) => (
-              <TableRow key={property.id}>
-                <TableCell className="font-medium">
-                  <div className="flex flex-col">
-                    {property.title}
-                    <span className="text-xs text-muted-foreground">{property.location}</span>
-                  </div>
-                </TableCell>
-                <TableCell>{property.category}</TableCell>
-                <TableCell>{property.tipo}</TableCell>
-                <TableCell>R$ {property.price}</TableCell>
-                <TableCell className="text-right space-x-2">
-                  <Link href={`/imoveis/${property.id}`} target="_blank">
-                    <Button variant="outline" size="icon"><ExternalLink className="w-4 h-4 text-blue-600" /></Button>
-                  </Link>
-                  <Button variant="outline" size="icon" onClick={() => handleDelete(property.id)}>
-                    <Trash2 className="w-4 h-4 text-red-600" />
+      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-50 border-b">
+            <tr>
+              <th className="p-4">Imóvel</th>
+              <th className="p-4">Cidade</th>
+              <th className="p-4">Preço</th>
+              <th className="p-4 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {properties.map((prop: any) => (
+              <tr key={prop.id} className="border-b hover:bg-gray-50">
+                <td className="p-4 font-medium">{prop.title}</td>
+                <td className="p-4 text-gray-600">{prop.location}</td>
+                <td className="p-4 font-bold">R$ {prop.price}</td>
+                <td className="p-4 text-right space-x-2">
+                  {/* LINK DE VISUALIZAÇÃO PÚBLICA (OPCIONAL) */}
+                  <Button variant="outline" size="icon" asChild title="Ver no site">
+                    <Link href={`/imoveis/${prop.id}`} target="_blank"><ExternalLink className="h-4 w-4" /></Link>
                   </Button>
-                </TableCell>
-              </TableRow>
+
+                  {/* CORREÇÃO: EDITAR ABRE NA MESMA GUIA E NO CAMINHO DE ADMIN */}
+                  <Button variant="outline" size="icon" className="text-blue-600" asChild>
+                    <Link href={`/admin/imoveis/editar/${prop.id}`}><Pencil className="h-4 w-4" /></Link>
+                  </Button>
+
+                  {/* BOTÃO EXCLUIR FUNCIONAL */}
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="text-red-600" 
+                    onClick={() => handleDelete(prop.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </td>
+              </tr>
             ))}
-            {properties.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
-                  Nenhum imóvel cadastrado.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+          </tbody>
+        </table>
       </div>
     </div>
   )
