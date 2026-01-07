@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Property {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  price       String
+  location    String
+  category    String   // NOVO: 'Urbano' ou 'Rural'
+  tipo        String   // 'Casa', 'Fazenda', 'Lote', etc.
+  bedrooms    Int
+  bathrooms   Int
+  parking     Int
+  area        Int
+  images      String[] // Array de URLs das fotos
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("properties")
+}
+
+model Institutional {
+  id        String   @id @default(uuid())
+  key       String   @unique // ex: 'quem-somos'
+  content   String   @db.Text
+  imageUrl  String?
+  updatedAt DateTime @updatedAt
+}
