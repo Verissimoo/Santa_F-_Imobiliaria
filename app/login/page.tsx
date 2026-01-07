@@ -16,12 +16,20 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
     
+    // Verificação de credenciais
     if (user === "admin" && password === "santafe123") {
-      // Simula salvar a sessão (em um projeto real usaríamos cookies/next-auth)
-      localStorage.setItem("isLoggedIn", "true")
       
-      toast({ title: "Bem-vindo!", description: "Login realizado com sucesso." })
-      router.push("/admin/imoveis/novo")
+      // 1. SALVAR O TOKEN: Sincronizado com a chave 'auth_token' utilizada na Navbar
+      localStorage.setItem("auth_token", "true")
+      
+      toast({ 
+        title: "Bem-vindo!", 
+        description: "Login realizado com sucesso." 
+      })
+
+      // 2. REDIRECIONAMENTO: Agora abre diretamente a lista geral de imóveis no Admin
+      router.push("/admin")
+      
     } else {
       toast({ 
         variant: "destructive", 

@@ -1,17 +1,26 @@
+// lib/prisma.ts
 import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
 
-// Pega a URL do seu .env
-const connectionString = `${process.env.DATABASE_URL}`
+const connectionString = process.env.DATABASE_URL
 
-// Configura o pool de conexão para o PostgreSQL
-const pool = new Pool({ connectionString })
+if (!connectionString) {
+  throw new Error("A variável de ambiente DATABASE_URL não foi definida no Vercel.")
+}
+
+// Configura o pool com suporte a SSL para o banco online
+const pool = new Pool({ 
+  connectionString,
+  ssl: {
+    rejectUnauthorized: false // Necessário para Supabase/Neon no Vercel
+  }
+})
+
 const adapter = new PrismaPg(pool)
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
-// Exporta a instância do Prisma para ser usada em todo o projeto
 export const prisma =
   globalForPrisma.prisma || new PrismaClient({ adapter })
 
