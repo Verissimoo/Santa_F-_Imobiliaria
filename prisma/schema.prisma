@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
 }
 
 model Property {
@@ -23,7 +23,7 @@ model Property {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@map("properties") // ADICIONE ISSO: Mapeia o modelo para a tabela 'properties'
+  @@map("properties")
 }
 
 model Institutional {
@@ -33,5 +33,5 @@ model Institutional {
   imageUrl  String?
   updatedAt DateTime @updatedAt
 
-  @@map("institutional") // ADICIONE ISSO
+  @@map("institutional")
 }

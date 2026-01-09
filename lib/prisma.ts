@@ -6,14 +6,15 @@ import { PrismaClient } from '@prisma/client'
 const connectionString = process.env.DATABASE_URL
 
 if (!connectionString) {
-  throw new Error("A variável de ambiente DATABASE_URL não foi definida no Vercel.")
+  throw new Error("A variável DATABASE_URL não foi encontrada no arquivo .env")
 }
 
-// Configura o pool com suporte a SSL para o banco online
+// Usamos o Pool da biblioteca 'pg' que já está no seu package.json
 const pool = new Pool({ 
   connectionString,
   ssl: {
-    rejectUnauthorized: false // Necessário para Supabase/Neon no Vercel
+    // Essencial para evitar o erro de certificado no Supabase
+    rejectUnauthorized: false 
   }
 })
 
@@ -21,6 +22,7 @@ const adapter = new PrismaPg(pool)
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
+// Passamos o adaptador explicitamente para o Prisma 7
 export const prisma =
   globalForPrisma.prisma || new PrismaClient({ adapter })
 
