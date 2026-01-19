@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Bed, Bath, Car, Maximize } from "lucide-react"
+import { Bed, Bath, Droplets, Maximize } from "lucide-react" // Trocado Car por Droplets
 
 interface PropertyCardProps {
   id: string
@@ -9,7 +9,7 @@ interface PropertyCardProps {
   location: string
   bedrooms: number
   bathrooms: number
-  parking: number
+  waterSources: number // Alterado de parking
   area: number
 }
 
@@ -21,13 +21,12 @@ export function PropertyCard({
   location,
   bedrooms,
   bathrooms,
-  parking,
+  waterSources,
   area,
 }: PropertyCardProps) {
   return (
     <Link href={`/imoveis/${id}`} className="group">
       <div className="bg-white rounded-xl overflow-hidden border hover:shadow-xl transition-shadow duration-300">
-        {/* Image */}
         <div className="relative h-64 overflow-hidden">
           <img
             src={image || "/placeholder.svg"}
@@ -36,16 +35,12 @@ export function PropertyCard({
           />
         </div>
 
-        {/* Content */}
         <div className="p-5">
-          {/* Price */}
           <div className="text-2xl font-bold text-[#1E5933] mb-2">{price}</div>
 
-          {/* Title and Location */}
           <h3 className="font-semibold text-foreground mb-1 group-hover:text-[#1E5933] transition-colors">{title}</h3>
           <p className="text-sm text-muted-foreground mb-4">{location}</p>
 
-          {/* Features */}
           <div className="flex items-center justify-between pt-4 border-t">
             {bedrooms > 0 && (
               <div className="flex items-center gap-1.5">
@@ -59,9 +54,10 @@ export function PropertyCard({
               <span className="text-sm text-muted-foreground">{bathrooms}</span>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <Car className="w-4 h-4 text-[#B5893E]" />
-              <span className="text-sm text-muted-foreground">{parking}</span>
+            {/* ÍCONE DE ÁGUA / NASCENTES */}
+            <div className="flex items-center gap-1.5" title="Nascentes/Represas">
+              <Droplets className="w-4 h-4 text-[#B5893E]" />
+              <span className="text-sm text-muted-foreground">{waterSources}</span>
             </div>
 
             <div className="flex items-center gap-1.5">

@@ -11,7 +11,7 @@ export function Footer() {
             <img
               src="/images/doc-20251227-wa0072.png"
               alt="Santa Fé Logo"
-              className="h-20 w-auto mb-4 brightness-0 invert"
+              className="h-23 w-auto mb-1 "
             />
             <p className="text-white/80 text-sm leading-relaxed max-w-md">
               Excelência em consultoria e gestão imobiliária desde 1998. Conectando pessoas aos imóveis dos seus sonhos.
@@ -40,15 +40,15 @@ export function Footer() {
             <div className="flex flex-col gap-3">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#B5893E] mt-0.5 flex-shrink-0" />
-                <span className="text-white/80 text-sm">Av. Paulista, 1000 - São Paulo</span>
+                <span className="text-white/80 text-sm">Pirenópolis • Goiás</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#B5893E] flex-shrink-0" />
-                <span className="text-white/80 text-sm">(11) 3456-7890</span>
+                <span className="text-white/80 text-sm">(62) 8346-9699</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#B5893E] flex-shrink-0" />
-                <span className="text-white/80 text-sm">contato@santafe.com.br</span>
+                <span className="text-white/80 text-sm">gestaoimobsantafe@gmail.com</span>
               </div>
             </div>
           </div>

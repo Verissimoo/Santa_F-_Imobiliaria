@@ -38,7 +38,7 @@ export function Navbar() {
             </Link>
             
             <Link 
-              href="https://wa.me/5561974036070" 
+              href="https://wa.me/556283469699" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-[#1E5933] hover:text-[#B5893E] font-medium transition-colors"

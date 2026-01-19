@@ -1,11 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'vfrlzgnsivxgyaeqynuk.supabase.co', // Host do seu projeto Supabase
+      },
+    ],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

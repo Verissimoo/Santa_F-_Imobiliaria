@@ -16,10 +16,12 @@ model Property {
   tipo        String   // 'Casa', 'Fazenda', 'Lote', etc.
   bedrooms    Int
   bathrooms   Int
-  parking     Int
+  waterSources    Int      @default(0)
   area        Int
   images      String[] // Array de URLs das fotos
   isFeatured  Boolean  @default(false)
+  consultantName  String?
+  consultantPhone String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

@@ -2,135 +2,136 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { PropertyCard } from "@/components/property-card"
 import { SearchBar } from "@/components/search-bar"
+import { prisma } from "@/lib/prisma"
+import { Suspense } from "react"
+import { ShieldCheck, Map, Sprout, ArrowRight } from "lucide-react"
 
-const featuredProperties = [
-  {
-    id: "1",
-    image: "/luxury-modern-apartment-exterior.jpg",
-    price: "R$ 850.000",
-    title: "Apartamento Moderno",
-    location: "Jardins, São Paulo",
-    bedrooms: 3,
-    bathrooms: 2,
-    parking: 2,
-    area: 120,
-  },
-  {
-    id: "2",
-    image: "/elegant-penthouse-with-city-view.jpg",
-    price: "R$ 1.200.000",
-    title: "Cobertura de Luxo",
-    location: "Moema, São Paulo",
-    bedrooms: 4,
-    bathrooms: 3,
-    parking: 3,
-    area: 180,
-  },
-  {
-    id: "3",
-    image: "/beautiful-modern-house.jpg",
-    price: "R$ 2.500.000",
-    title: "Casa em Condomínio",
-    location: "Alphaville, São Paulo",
-    bedrooms: 5,
-    bathrooms: 4,
-    parking: 4,
-    area: 350,
-  },
-  {
-    id: "4",
-    image: "/modern-commercial-building.png",
-    price: "R$ 3.500.000",
-    title: "Edifício Comercial",
-    location: "Paulista, São Paulo",
-    bedrooms: 0,
-    bathrooms: 6,
-    parking: 10,
-    area: 600,
-  },
-]
+export default async function HomePage() {
+  const featuredProperties = await prisma.property.findMany({
+    where: { isFeatured: true },
+    orderBy: { createdAt: "desc" },
+    take: 4 
+  })
 
-export default function HomePage() {
+  const formatPrice = (price: string) => {
+    const value = parseInt(price.replace(/\D/g, "")) || 0
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value)
+  }
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-[600px] md:h-[700px] bg-cover bg-center">
+      {/* Hero Section Minimalista */}
+      <section className="relative h-[600px] md:h-[750px] flex items-center justify-center overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 scale-105"
           style={{
-            backgroundImage: "url('/luxury-real-estate-building-facade.jpg')",
+            backgroundImage: "url(/luxury-real-estate-building-facade.jpg)", 
           }}
         >
-          <div className="absolute inset-0 bg-black/40" />
+          {/* Overlay escuro clássico para contraste máximo e limpo */}
+          <div className="absolute inset-0 bg-black/50" />
         </div>
 
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
-          <h1 className="text-4xl md:text-6xl font-serif text-white text-center mb-6 text-balance">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 text-center">
+          {/* Título em uma linha com sombra projetada neutra e profissional */}
+          <h1 
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6 leading-tight tracking-tight whitespace-nowrap"
+            style={{ 
+              textShadow: '0px 4px 20px rgba(0, 0, 0, 0.6)' 
+            }}
+          >
             Encontre o Imóvel dos Seus Sonhos
           </h1>
-          <p className="text-lg md:text-xl text-white/90 text-center mb-12 max-w-2xl text-balance">
-            Excelência em consultoria e gestão imobiliária
+          
+          <p className="text-lg md:text-xl text-white/90 mb-12 max-w-3xl mx-auto font-light tracking-wide">
+            Excelência em consultoria e gestão imobiliária no coração de Goiás.
           </p>
 
-          {/* Search Bar */}
-          <SearchBar />
+          <div className="w-full max-w-5xl mx-auto transform translate-y-4">
+            <Suspense fallback={<div className="h-20 w-full bg-white/10 backdrop-blur-md animate-pulse rounded-2xl" />}>
+              <SearchBar />
+            </Suspense>
+          </div>
         </div>
       </section>
 
-      {/* Featured Properties Section */}
-      <section className="py-16 md:py-24 px-4 bg-background">
+      {/* Seção de Destaques */}
+      <section className="py-20 md:py-28 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-serif text-[#1E5933] mb-4">Imóveis em Destaque</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Selecionamos os melhores imóveis para você
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">
+              Curadoria exclusiva de propriedades selecionadas pela Santa Fé.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProperties.map((property) => (
-              <PropertyCard key={property.id} {...property} />
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {featuredProperties.length === 0 ? (
+              <div className="col-span-full py-24 text-center border border-dashed rounded-3xl bg-gray-50/50">
+                <p className="text-muted-foreground">Novas oportunidades em breve.</p>
+              </div>
+            ) : (
+              featuredProperties.map((property) => (
+                <PropertyCard 
+                  key={property.id} 
+                  {...property} 
+                  price={formatPrice(property.price)}
+                  image={property.images[0] || "/placeholder.svg"} 
+                />
+              ))
+            )}
           </div>
 
-          <div className="text-center mt-12">
-            <Button asChild size="lg" className="bg-[#1E5933] hover:bg-[#1E5933]/90 text-white px-8">
-              <Link href="/imoveis">Ver Todos os Imóveis</Link>
+          <div className="text-center mt-16">
+            <Button asChild size="lg" className="bg-[#1E5933] hover:bg-[#1E5933]/90 text-white px-10 h-14 rounded-xl text-lg transition-all active:scale-95">
+              <Link href="/imoveis">Explorar Imóveis <ArrowRight className="ml-2 w-5 h-5" /></Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-16 md:py-24 px-4 bg-[#F8F9FA]">
+      {/* Por Que Escolher a Santa Fé? */}
+      <section className="py-20 md:py-28 px-4 bg-[#F8F9FA] border-t border-gray-100">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-20">
             <h2 className="text-3xl md:text-5xl font-serif text-[#1E5933] mb-4">Por Que Escolher a Santa Fé?</h2>
+            <div className="w-24 h-1.5 bg-[#B5893E] mx-auto rounded-full opacity-30" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#B5893E]/10 flex items-center justify-center">
-                <div className="w-8 h-8 bg-[#B5893E] rounded-full" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="text-center group p-8 bg-white rounded-[2rem] shadow-sm border border-gray-100 transition-all hover:shadow-md">
+              <div className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-[#1E5933]/5 flex items-center justify-center">
+                <Map className="w-8 h-8 text-[#B5893E]" />
               </div>
-              <h3 className="text-xl font-semibold text-[#1E5933] mb-3">Experiência</h3>
-              <p className="text-muted-foreground">Mais de 25 anos de mercado com excelência comprovada</p>
+              <h3 className="text-xl font-bold text-[#1E5933] mb-4 uppercase tracking-widest text-sm">Atuação Regional</h3>
+              <p className="text-gray-500 leading-relaxed text-sm font-light">
+                Foco em Pirenópolis e Goiânia, com expansão estratégica para MT, MS, TO, BA e MG.
+              </p>
             </div>
 
-            <div className="text-center p-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#B5893E]/10 flex items-center justify-center">
-                <div className="w-8 h-8 bg-[#B5893E] rounded-full" />
+            <div className="text-center group p-8 bg-white rounded-[2rem] shadow-sm border border-gray-100 transition-all hover:shadow-md">
+              <div className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-[#1E5933]/5 flex items-center justify-center">
+                <Sprout className="w-8 h-8 text-[#B5893E]" />
               </div>
-              <h3 className="text-xl font-semibold text-[#1E5933] mb-3">Atendimento Personalizado</h3>
-              <p className="text-muted-foreground">Dedicação total para encontrar o imóvel perfeito para você</p>
+              <h3 className="text-xl font-bold text-[#1E5933] mb-4 uppercase tracking-widest text-sm">Foco no Agronegócio</h3>
+              <p className="text-gray-500 leading-relaxed text-sm font-light">
+                Especialistas na intermediação de fazendas e áreas produtivas em todo o país.
+              </p>
             </div>
 
-            <div className="text-center p-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#B5893E]/10 flex items-center justify-center">
-                <div className="w-8 h-8 bg-[#B5893E] rounded-full" />
+            <div className="text-center group p-8 bg-white rounded-[2rem] shadow-sm border border-gray-100 transition-all hover:shadow-md">
+              <div className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-[#1E5933]/5 flex items-center justify-center">
+                <ShieldCheck className="w-8 h-8 text-[#B5893E]" />
               </div>
-              <h3 className="text-xl font-semibold text-[#1E5933] mb-3">Portfólio Premium</h3>
-              <p className="text-muted-foreground">Seleção exclusiva dos melhores imóveis da região</p>
+              <h3 className="text-xl font-bold text-[#1E5933] mb-4 uppercase tracking-widest text-sm">Segurança Jurídica</h3>
+              <p className="text-gray-500 leading-relaxed text-sm font-light">
+                Transparência e ética garantindo proteção total ao seu investimento patrimonial.
+              </p>
             </div>
           </div>
         </div>
@@ -138,3 +139,4 @@ export default function HomePage() {
     </div>
   )
 }
+  

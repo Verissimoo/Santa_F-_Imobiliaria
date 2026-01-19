@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Search } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation" // Importado para navegação
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 export function SearchBar() {
@@ -12,7 +12,7 @@ export function SearchBar() {
   // Inicializamos os estados com o que já estiver na URL ou vazio
   const [category, setCategory] = useState(searchParams.get("category") || "")
   const [type, setType] = useState(searchParams.get("type") || "")
-  const [city, setCity] = useState(searchParams.get("city") || "")
+  const [state, setState] = useState(searchParams.get("state") || "")
 
   const propertyTypes = {
     Urbano: ["Casa", "Apartamento", "Lote", "Terreno", "Comercial"],
@@ -23,7 +23,7 @@ export function SearchBar() {
     const params = new URLSearchParams()
     if (category) params.set("category", category)
     if (type) params.set("type", type)
-    if (city) params.set("city", city)
+    if (state) params.set("state", state)
 
     // Faz a busca recarregando a página com os filtros na URL
     router.push(`/imoveis?${params.toString()}`)
@@ -64,19 +64,22 @@ export function SearchBar() {
           </select>
         </div>
 
-        {/* Cidade */}
+        {/* Estado (Antiga Cidade) */}
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-[#1E5933] mb-2">Cidade</label>
+          <label className="text-sm font-medium text-[#1E5933] mb-2">Estado</label>
           <select 
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            value={state}
+            onChange={(e) => setState(e.target.value)}
             className="h-11 px-4 rounded-lg border border-input bg-background text-black focus:outline-none focus:ring-2 focus:ring-[#B5893E]"
           >
-            <option value="">Todas as cidades</option>
-            <option value="Pirenópolis">Pirenópolis</option>
-            <option value="Corumbá de Goiás">Corumbá de Goiás</option>
-            <option value="Cocalzinho">Cocalzinho</option>
-            <option value="Abadiânia">Abadiânia</option>
+            <option value="">Todos os estados</option>
+            <option value="GO">Goiás (GO)</option>
+            <option value="DF">Distrito Federal (DF)</option>
+            <option value="MT">Mato Grosso (MT)</option>
+            <option value="MS">Mato Grosso do Sul (MS)</option>
+            <option value="TO">Tocantins (TO)</option>
+            <option value="BA">Bahia (BA)</option>
+            <option value="MG">Minas Gerais (MG)</option>
           </select>
         </div>
       </div>
