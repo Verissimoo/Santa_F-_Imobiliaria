@@ -36,7 +36,6 @@ export default function EditarImovelPage({ params }: { params: Promise<{ id: str
         setFormData({
           ...data,
           price: data.price.toString().replace(/\D/g, ""),
-          // Mapeamento correto do campo novo
           waterSources: data.waterSources || 0,
           consultantName: data.consultantName || "Rose Boaro",
           consultantPhone: data.consultantPhone || "556283469699"
@@ -46,6 +45,18 @@ export default function EditarImovelPage({ params }: { params: Promise<{ id: str
       })
       .catch(() => toast.error("Erro ao carregar dados"))
   }, [resolvedParams.id])
+
+  // ESTA FUNÇÃO É A QUE ESTAVA FALTANDO E CAUSOU O ERRO NO VERCEL
+  const handleFiles = (files: FileList) => {
+    const fileArray = Array.from(files)
+    fileArray.forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        if (e.target?.result) setImages((prev) => [...prev, e.target!.result as string])
+      }
+      reader.readAsDataURL(file)
+    })
+  }
 
   const handleConsultantChange = (name: string) => {
     const selected = consultants.find(c => c.name === name)
