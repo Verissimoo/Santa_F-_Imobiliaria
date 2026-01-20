@@ -1,4 +1,4 @@
-import { Bed, Bath, Droplets, Maximize, MapPin, Phone, Mail, ArrowLeft } from "lucide-react"
+import { Bed, Bath, Maximize, MapPin, Phone, Mail, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma" 
@@ -85,49 +85,30 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
                     <div className="text-4xl font-bold text-[#1E5933]">{formattedPrice}</div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-10">
-                    <div className="flex items-center gap-3 p-4 bg-[#F8F9FA] rounded-2xl">
+                  {/* INFO GRID: Agora em 3 colunas, apenas ícone e número */}
+                  <div className="grid grid-cols-3 gap-2 mb-10">
+                    <div className="flex flex-col items-center justify-center gap-2 p-3 bg-[#F8F9FA] rounded-2xl">
                       <Bed className="w-5 h-5 text-[#B5893E]" />
-                      <div className="flex flex-col">
-                        <span className="text-[10px] text-gray-400 uppercase font-bold">Quartos</span>
-                        <span className="font-bold text-[#1E5933]">{property.bedrooms}</span>
-                      </div>
+                      <span className="font-bold text-[#1E5933]">{property.bedrooms}</span>
                     </div>
-                    <div className="flex items-center gap-3 p-4 bg-[#F8F9FA] rounded-2xl">
+                    <div className="flex flex-col items-center justify-center gap-2 p-3 bg-[#F8F9FA] rounded-2xl">
                       <Bath className="w-5 h-5 text-[#B5893E]" />
-                      <div className="flex flex-col">
-                        <span className="text-[10px] text-gray-400 uppercase font-bold">Banh.</span>
-                        <span className="font-bold text-[#1E5933]">{property.bathrooms}</span>
-                      </div>
+                      <span className="font-bold text-[#1E5933]">{property.bathrooms}</span>
                     </div>
-                    <div className="flex items-center gap-3 p-4 bg-[#F8F9FA] rounded-2xl">
-                      <Droplets className="w-5 h-5 text-[#B5893E]" />
-                      <div className="flex flex-col">
-                        <span className="text-[10px] text-gray-400 uppercase font-bold">Nascentes</span>
-                        <span className="font-bold text-[#1E5933]">{property.waterSources}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-4 bg-[#F8F9FA] rounded-2xl">
+                    <div className="flex flex-col items-center justify-center gap-2 p-3 bg-[#F8F9FA] rounded-2xl">
                       <Maximize className="w-5 h-5 text-[#B5893E]" />
-                      <div className="flex flex-col">
-                        <span className="text-[10px] text-gray-400 uppercase font-bold">Área</span>
-                        <span className="font-bold text-[#1E5933]">{property.area} m²</span>
-                      </div>
+                      <span className="font-bold text-[#1E5933] whitespace-nowrap">{property.area} m²</span>
                     </div>
                   </div>
 
                   <div className="space-y-4">
+                    {/* Botão Principal: Agora direciona para o WhatsApp */}
                     <Button asChild className="w-full bg-[#1E5933] hover:bg-[#1E5933]/90 text-white py-7 text-lg rounded-2xl shadow-lg transition-all active:scale-95">
-                      <Link href={`tel:${cPhone}`}>
-                        <Phone className="w-5 h-5 mr-3" />
-                        Ligar para {cName.split(' ')[0]}
-                      </Link>
-                    </Button>
-
-                    <Button variant="outline" className="w-full border-2 border-[#1E5933] text-[#1E5933] hover:bg-[#1E5933]/5 py-7 text-lg rounded-2xl" asChild>
-                      <Link href={`mailto:gestaoimobsantafe@gmail.com?subject=Interesse no imóvel: ${property.title}`}>
-                        <Mail className="w-5 h-5 mr-3" />
-                        Enviar E-mail
+                      <Link 
+                        href={`https://wa.me/${cPhone}?text=Olá ${cName}! Vi o imóvel "${property.title}" no site.`}
+                        target="_blank"
+                      >
+                        Falar com {cName.split(' ')[0]}
                       </Link>
                     </Button>
                   </div>
@@ -146,6 +127,7 @@ export default async function PropertyDetailPage(props: { params: Promise<{ id: 
         </div>
       </section>
 
+      {/* Botão Flutuante Dinâmico do WhatsApp */}
       <Link
         href={`https://wa.me/${cPhone}?text=Olá ${cName}! Vi o imóvel "${property.title}" no site e gostaria de agendar uma visita.`}
         target="_blank"

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Save, Loader2, Home, MapPin, ImageIcon, Plus, X, UserCircle, Droplets } from "lucide-react"
+import { ArrowLeft, Save, Loader2, Home, MapPin, ImageIcon, Plus, X, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -36,7 +36,6 @@ export default function EditarImovelPage({ params }: { params: Promise<{ id: str
         setFormData({
           ...data,
           price: data.price.toString().replace(/\D/g, ""),
-          waterSources: data.waterSources || 0,
           consultantName: data.consultantName || "Rose Boaro",
           consultantPhone: data.consultantPhone || "556283469699"
         })
@@ -46,7 +45,6 @@ export default function EditarImovelPage({ params }: { params: Promise<{ id: str
       .catch(() => toast.error("Erro ao carregar dados"))
   }, [resolvedParams.id])
 
-  // ESTA FUNÇÃO É A QUE ESTAVA FALTANDO E CAUSOU O ERRO NO VERCEL
   const handleFiles = (files: FileList) => {
     const fileArray = Array.from(files)
     fileArray.forEach((file) => {
@@ -148,17 +146,16 @@ export default function EditarImovelPage({ params }: { params: Promise<{ id: str
 
         <div className="space-y-8">
           <Card>
-            <CardHeader><CardTitle className="font-serif">Preço e Recursos Hídricos</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="font-serif">Preço e Medidas</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label>Preço</Label>
                 <Input value={formData.price} onChange={e => setFormData({...formData, price: e.target.value.replace(/\D/g, "")})} />
               </div>
               <div className="space-y-2"><Label>Área (m²)</Label><Input value={formData.area} onChange={e => setFormData({...formData, area: e.target.value})} /></div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1"><Label className="text-[10px]">Quartos</Label><Input type="number" value={formData.bedrooms} onChange={e => setFormData({...formData, bedrooms: e.target.value})} /></div>
                 <div className="space-y-1"><Label className="text-[10px]">Banh.</Label><Input type="number" value={formData.bathrooms} onChange={e => setFormData({...formData, bathrooms: e.target.value})} /></div>
-                <div className="space-y-1"><Label className="text-[10px]">Nascentes</Label><Input type="number" value={formData.waterSources} onChange={e => setFormData({...formData, waterSources: e.target.value})} /></div>
               </div>
             </CardContent>
           </Card>

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Bed, Bath, Droplets, Maximize } from "lucide-react" // Trocado Car por Droplets
+import { Bed, Bath, Maximize } from "lucide-react"
 
 interface PropertyCardProps {
   id: string
@@ -9,7 +9,6 @@ interface PropertyCardProps {
   location: string
   bedrooms: number
   bathrooms: number
-  waterSources: number // Alterado de parking
   area: number
 }
 
@@ -21,7 +20,6 @@ export function PropertyCard({
   location,
   bedrooms,
   bathrooms,
-  waterSources,
   area,
 }: PropertyCardProps) {
   return (
@@ -38,31 +36,26 @@ export function PropertyCard({
         <div className="p-5">
           <div className="text-2xl font-bold text-[#1E5933] mb-2">{price}</div>
 
-          <h3 className="font-semibold text-foreground mb-1 group-hover:text-[#1E5933] transition-colors">{title}</h3>
-          <p className="text-sm text-muted-foreground mb-4">{location}</p>
+          <h3 className="font-semibold text-foreground mb-1 group-hover:text-[#1E5933] transition-colors line-clamp-1">{title}</h3>
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-1">{location}</p>
 
+          {/* Features: Apenas ícone e número */}
           <div className="flex items-center justify-between pt-4 border-t">
             {bedrooms > 0 && (
               <div className="flex items-center gap-1.5">
                 <Bed className="w-4 h-4 text-[#B5893E]" />
-                <span className="text-sm text-muted-foreground">{bedrooms}</span>
+                <span className="text-sm text-muted-foreground font-medium">{bedrooms}</span>
               </div>
             )}
 
             <div className="flex items-center gap-1.5">
               <Bath className="w-4 h-4 text-[#B5893E]" />
-              <span className="text-sm text-muted-foreground">{bathrooms}</span>
-            </div>
-
-            {/* ÍCONE DE ÁGUA / NASCENTES */}
-            <div className="flex items-center gap-1.5" title="Nascentes/Represas">
-              <Droplets className="w-4 h-4 text-[#B5893E]" />
-              <span className="text-sm text-muted-foreground">{waterSources}</span>
+              <span className="text-sm text-muted-foreground font-medium">{bathrooms}</span>
             </div>
 
             <div className="flex items-center gap-1.5">
               <Maximize className="w-4 h-4 text-[#B5893E]" />
-              <span className="text-sm text-muted-foreground">{area}m²</span>
+              <span className="text-sm text-muted-foreground font-medium">{area}m²</span>
             </div>
           </div>
         </div>

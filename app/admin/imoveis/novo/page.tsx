@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Save, Home, MapPin, ImageIcon, Plus, X, Loader2, UserCircle, Droplets } from "lucide-react"
+import { ArrowLeft, Save, Home, MapPin, ImageIcon, Plus, X, Loader2, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -35,7 +35,6 @@ export default function NovoImovelPage() {
     area: "",
     bedrooms: "",
     bathrooms: "",
-    waterSources: "0", // Alterado de parking para waterSources
     consultantName: "Rose Boaro",
     consultantPhone: "556283469699",
   })
@@ -206,7 +205,7 @@ export default function NovoImovelPage() {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle className="font-serif">Preço e Recursos Hídricos</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="font-serif">Preço e Medidas</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="price">Preço (Apenas números)</Label>
@@ -219,10 +218,9 @@ export default function NovoImovelPage() {
                 </p>
               </div>
               <div className="space-y-2"><Label htmlFor="area">Área Total (m²)</Label><Input id="area" type="number" value={formData.area} onChange={handleChange} required /></div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1"><Label className="text-[10px]">Quartos</Label><Input id="bedrooms" type="number" value={formData.bedrooms} onChange={handleChange} /></div>
                 <div className="space-y-1"><Label className="text-[10px]">Banh.</Label><Input id="bathrooms" type="number" value={formData.bathrooms} onChange={handleChange} /></div>
-                <div className="space-y-1"><Label className="text-[10px]">Nascentes</Label><Input id="waterSources" type="number" value={formData.waterSources} onChange={handleChange} /></div>
               </div>
             </CardContent>
           </Card>

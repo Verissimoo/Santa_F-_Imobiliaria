@@ -6,6 +6,9 @@ import { prisma } from "@/lib/prisma"
 import { Suspense } from "react"
 import { ShieldCheck, Map, Sprout, ArrowRight } from "lucide-react"
 
+// Força a página a ser sempre dinâmica, resolvendo o problema de atualização dos destaques
+export const dynamic = "force-dynamic"
+
 export default async function HomePage() {
   const featuredProperties = await prisma.property.findMany({
     where: { isFeatured: true },
@@ -24,36 +27,41 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section Minimalista */}
-      <section className="relative h-[600px] md:h-[750px] flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 scale-105"
-          style={{
-            backgroundImage: "url(/luxury-real-estate-building-facade.jpg)", 
-          }}
-        >
-          {/* Overlay escuro clássico para contraste máximo e limpo */}
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 text-center">
-          {/* Título em uma linha com sombra projetada neutra e profissional */}
-          <h1 
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6 leading-tight tracking-tight whitespace-nowrap"
-            style={{ 
-              textShadow: '0px 4px 20px rgba(0, 0, 0, 0.6)' 
+    <div className="min-h-screen bg-white">
+      {/* Hero Section Reestruturada */}
+      <section className="relative overflow-hidden">
+        {/* Container da Imagem e Título */}
+        <div className="relative h-[450px] md:h-[750px] flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 scale-105"
+            style={{
+              backgroundImage: "url(/luxury-real-estate-building-facade.jpg)", 
             }}
           >
-            Encontre o Imóvel dos Seus Sonhos
-          </h1>
-          
-          <p className="text-lg md:text-xl text-white/90 mb-12 max-w-3xl mx-auto font-light tracking-wide">
-            Excelência em consultoria e gestão imobiliária no coração de Goiás.
-          </p>
+            <div className="absolute inset-0 bg-black/50" />
+          </div>
 
-          <div className="w-full max-w-5xl mx-auto transform translate-y-4">
-            <Suspense fallback={<div className="h-20 w-full bg-white/10 backdrop-blur-md animate-pulse rounded-2xl" />}>
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-4 text-center">
+            <h1 
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6 leading-tight tracking-tight whitespace-normal md:whitespace-nowrap"
+              style={{ 
+                textShadow: '0px 4px 20px rgba(0, 0, 0, 0.6)' 
+              }}
+            >
+              Encontre o Imóvel dos Seus Sonhos
+            </h1>
+            
+            <p className="text-lg md:text-xl text-white/90 mb-4 max-w-3xl mx-auto font-light tracking-wide">
+              Excelência em consultoria e gestão imobiliária no coração de Goiás.
+            </p>
+          </div>
+        </div>
+
+        {/* Barra de Busca (Filtro) */}
+        {/* Mobile: mt-8 (abaixo da imagem) | Desktop: md:-mt-20 (em cima da imagem) */}
+        <div className="relative z-20 px-4 mt-8 md:-mt-20 mb-10 md:mb-16">
+          <div className="w-full max-w-5xl mx-auto">
+            <Suspense fallback={<div className="h-20 w-full bg-gray-100 animate-pulse rounded-2xl" />}>
               <SearchBar />
             </Suspense>
           </div>
@@ -61,7 +69,7 @@ export default async function HomePage() {
       </section>
 
       {/* Seção de Destaques */}
-      <section className="py-20 md:py-28 px-4 bg-white">
+      <section className="py-12 md:py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-serif text-[#1E5933] mb-4">Imóveis em Destaque</h2>
@@ -79,16 +87,21 @@ export default async function HomePage() {
               featuredProperties.map((property) => (
                 <PropertyCard 
                   key={property.id} 
-                  {...property} 
+                  id={property.id}
+                  title={property.title}
+                  location={property.location}
+                  bedrooms={property.bedrooms}
+                  bathrooms={property.bathrooms}
+                  area={property.area}
                   price={formatPrice(property.price)}
                   image={property.images[0] || "/placeholder.svg"} 
-                />
+  />
               ))
             )}
           </div>
 
           <div className="text-center mt-16">
-            <Button asChild size="lg" className="bg-[#1E5933] hover:bg-[#1E5933]/90 text-white px-10 h-14 rounded-xl text-lg transition-all active:scale-95">
+            <Button asChild size="lg" className="bg-[#1E5933] hover:bg-[#1E5933]/90 text-white px-10 h-14 rounded-xl text-lg transition-all active:scale-95 shadow-lg shadow-[#1E5933]/20">
               <Link href="/imoveis">Explorar Imóveis <ArrowRight className="ml-2 w-5 h-5" /></Link>
             </Button>
           </div>
