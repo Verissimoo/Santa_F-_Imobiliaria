@@ -59,7 +59,6 @@ export default async function ImoveisPage(props: {
                   key={property.id} 
                   {...property} 
                   // Passagem explícita para compatibilidade com o componente PropertyCard atualizado
-                  waterSources={property.waterSources}
                   price={formatPrice(property.price)}
                   image={property.images[0] || "/placeholder.svg"} 
                 />
