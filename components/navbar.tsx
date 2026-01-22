@@ -73,7 +73,7 @@ export function Navbar() {
               <Link href="/" className="px-2 py-2 text-[#1E5933] font-medium" onClick={() => setIsOpen(false)}>Início</Link>
               <Link href="/imoveis" className="px-2 py-2 text-[#1E5933] font-medium" onClick={() => setIsOpen(false)}>Imóveis</Link>
               <Link href="/empresa" className="px-2 py-2 text-[#1E5933] font-medium" onClick={() => setIsOpen(false)}>A Empresa</Link>
-              <Link href="https://wa.me/5561974036070" target="_blank" className="px-2 py-2 text-[#1E5933] font-medium" onClick={() => setIsOpen(false)}>Contato</Link>
+              <Link href="https://wa.me/556283469699" target="_blank" className="px-2 py-2 text-[#1E5933] font-medium" onClick={() => setIsOpen(false)}>Contato</Link>
               
               {/* Condição Mobile */}
               {isLoggedIn ? (
